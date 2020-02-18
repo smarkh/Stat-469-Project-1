@@ -1,8 +1,21 @@
+## Project 1- Teaching Pedagogy
+
+## R code
+
+## Load necessary libraries
+
 library(tidyverse)
 library(MASS)
 library(multcomp)
 library(nlme)
+
+## Read in data
+
 classes <- read.table("https://mheaton.byu.edu/docs/files/Stat469/Topics/1%20-%20Independence/3%20-%20Project/Data/ClassAssessment.txt", header=TRUE)
+
+#########
+## EDA ##
+#########
 
 ggplot(data=classes, aes(x=NStudents, y=Final)) + geom_point()
 classes$Semester <- as.factor(classes$Semester)
@@ -55,6 +68,7 @@ gls.fit <- gls(model = Final ~ ., data = classes, method = "ML",
 source("C:/Users/savani/Documents/BYU/Winter 2020/STAT 469/in_class/predictgls.R")
 
 ## describe how well your model fits your data
+## cross-validation
 n.cv <- nrow(classes) #Number of CV studies to run
 rpmse <- rep(x=NA, times=n.cv)
 bias <- rep(x=NA, times=n.cv)
@@ -102,3 +116,14 @@ ggplot(my.preds, aes(x=HW,y=Final)) + geom_point() + geom_smooth(se=FALSE) +
 
 ## do you think there are any class activities associated with improved learning? If so, which ones?
 confint(gls.fit,level=.95)
+
+
+
+
+# check linearity with lm object and avplots
+# because fixing equal variance with gls won't change/affect the linearity
+# 3 cases of hetero... fan: exponential, clear grouping: movie, if all July vs all January (groupd defined by month).... fixed variance, you know exactly what the D matrix is
+
+# trying to determine variance
+# think about the response variable and what it is... something about it being an average?
+# calculate your R^2... R^2= 1- sum()/sum()
